@@ -1,0 +1,49 @@
+{
+  "name": "@mainframe/sdk",
+  "version": "0.3.2",
+  "main": "lib/index.js",
+  "browser": "dist/mainframe.production.js",
+  "author": "Mainframe",
+  "license": "MIT",
+  "files": [
+    "dist/*",
+    "lib/*"
+  ],
+  "scripts": {
+    "clean": "del-cli dist lib",
+    "lint": "eslint 'src/**/*.js'",
+    "webpack": "webpack",
+    "build:dist": "cross-env BABEL_ENV=esm yarn webpack",
+    "build:lib": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
+    "build:flow": "flow-copy-source src lib",
+    "build": "yarn clean && yarn build:dist && yarn build:lib && yarn build:flow",
+    "test:types": "flow check",
+    "test": "yarn lint && yarn test:types"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@mainframe/eth": "^0.4.0",
+    "ethereumjs-abi": "^0.6.8",
+    "eventemitter3": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
+    "@mainframe/rpc-stream": "^0.3.0",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^5.2.0",
+    "del-cli": "^2.0.0",
+    "eslint": "^6.2.0",
+    "eslint-config-mainframe": "^4.0.1",
+    "flow-bin": "^0.105.2",
+    "flow-copy-source": "^2.0.8",
+    "prettier": "^1.18.2",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
+  }
+}
