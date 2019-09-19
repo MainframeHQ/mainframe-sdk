@@ -32,7 +32,7 @@ class WalletProvider {
   }
 
   async getAccounts() {
-    return this._rpc.request('wallet_getEthAccounts')
+    return this._rpc.request('ethereum_getAccounts')
   }
 
   async signTransaction(params) {
@@ -93,24 +93,24 @@ export default class EthAPIs extends ClientAPIs {
 
     this._sdk = sdk
 
-    const subscriptions = {
-      accountsChanged: () =>
-        subscribe(
-          sdk._rpc,
-          'wallet_subEthAccountsChanged',
-          'eth_accounts_subscription',
-        ),
-      networkChanged: () =>
-        subscribe(
-          sdk._rpc,
-          'blockchain_subscribeNetworkChanged',
-          'eth_network_subscription',
-        ),
-    }
-
     const rpcProvider = new RpcProvider(sdk._rpc)
     const walletProvider = new WalletProvider(sdk._rpc)
-    this._ethClient = new EthClient(rpcProvider, walletProvider, subscriptions)
+    this._ethClient = new EthClient(rpcProvider, walletProvider, {
+      accountsChanged: () => {
+        return subscribe(
+          sdk._rpc,
+          'ethereum_subscribeAccountsChanged',
+          'eth_accounts_subscription',
+        )
+      },
+      networkChanged: () => {
+        return subscribe(
+          sdk._rpc,
+          'ethereum_subscribeNetworkChanged',
+          'eth_network_subscription',
+        )
+      },
+    })
 
     this._web3Provider = new MFWeb3Provider(this._ethClient)
 
@@ -148,7 +148,7 @@ export default class EthAPIs extends ClientAPIs {
   }
 
   async getDefaultAccount(): Promise<?string> {
-    const accounts = await this._ethClient.getAccounts()
+    const accounts = await this.getAccounts()
     return accounts ? accounts[0] : undefined
   }
 

@@ -41,8 +41,4 @@ export default class MainframeSDK {
     }
     return this._ethereum
   }
-
-  apiVersion = () => {
-    return this._rpc.request('api_version')
-  }
 }

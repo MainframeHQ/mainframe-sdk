@@ -1,4 +1,5 @@
-//@flow
+// @flow
+
 import EventEmitter from 'eventemitter3'
 import { Observable } from 'rxjs'
 import type StreamRPC from '@mainframe/rpc-stream'
